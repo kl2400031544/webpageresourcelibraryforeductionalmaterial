@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KL UNIVERSITY LIBRARY</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f3f7;
+        }
+
+        /* BIG HEADER */
+        .header {
+            background: #b3133b;
+            padding: 25px;
+            text-align: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .tabs {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            margin: 5px;
+            background: #fff;
+            border: 2px solid #b3133b;
+            color: #b3133b;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .tab-btn.active {
+            background: #b3133b;
+            color: white;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fafafa;
+        }
+
+        label { display: block; margin: 10px 0 5px; }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #bbb;
+        }
+
+        button {
+            background: #b3133b;
+            border: none;
+            padding: 10px 18px;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        button.secondary {
+            background: #555;
+        }
+
+        .subject-card {
+            width: 30%;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 8px;
+            cursor: pointer;
+        }
+
+        .subject-card:hover {
+            border-color: #b3133b;
+        }
+
+        .flex { display: flex; flex-wrap: wrap; }
+
+        .hidden { display: none; }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ⭐ Added test line -->
+<p>Test push from VS Code</p>
+
+<div class="header">
+    KL UNIVERSITY LIBRARY PORTAL
+</div>
+
+<div class="container">
+
+    <!-- LOGIN SECTION -->
+    <div id="loginSection">
+
+        <div class="tabs">
+            <button class="tab-btn active" id="userTab">USER LOGIN</button>
+            <button class="tab-btn" id="adminTab">ADMIN LOGIN</button>
+        </div>
+
+        <!-- USER LOGIN -->
+        <div class="card" id="userLoginCard">
+            <h2>User Login</h2>
+            <form id="userLoginForm">
+                <label>User ID</label>
+                <input type="text" id="userId" required>
+
+                <label>Password</label>
+                <input type="password" id="userPass" required>
+
+                <button>Login</button>
+            </form>
+        </div>
+
+        <!-- ADMIN LOGIN -->
+        <div class="card hidden" id="adminLoginCard">
+            <h2>Admin Login</h2>
+            <form id="adminLoginForm">
+                <label>Admin Username</label>
+                <input type="text" id="adminId" required>
+
+                <label>Password</label>
+                <input type="password" id="adminPass" required>
+
+                <button>Login</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- USER DASHBOARD -->
+    <div id="userDashboard" class="hidden">
+        <div class="top-bar">
+            <h2>User Dashboard</h2>
+            <button class="secondary" id="logoutUserBtn">Logout</button>
+        </div>
+
+        <div class="card">
+            <h3>Subjects</h3>
+            <div class="flex" id="subjectList"></div>
+        </div>
+
+        <div class="card">
+            <h3 id="subjectTitle"></h3>
+            <p id="subjectDesc"></p>
+            <h4>Materials</h4>
+            <ul id="materialList"></ul>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div id="adminDashboard" class="hidden">
+        <div class="top-bar">
+            <h2>Admin Dashboard</h2>
+            <button class="secondary" id="logoutAdminBtn">Logout</button>
+        </div>
+
+        <div class="card">
+            <h3>Existing Subjects</h3>
+            <ul id="adminSubjectList"></ul>
+        </div>
+
+        <div class="flex">
+            <div class="card" style="width:45%">
+                <h3>Add Subject</h3>
+                <form id="addSubjectForm">
+                    <label>Subject Name</label>
+                    <input type="text" id="newSubName" required>
+
+                    <label>Description</label>
+                    <textarea id="newSubDesc" required></textarea>
+
+                    <button>Add Subject</button>
+                </form>
+            </div>
+
+            <div class="card" style="width:45%">
+                <h3>Add Material</h3>
+                <form id="addMaterialForm">
+                    <label>Select Subject</label>
+                    <select id="materialSubject"></select>
+
+                    <label>Material Title</label>
+                    <input type="text" id="materialTitle" required>
+
+                    <label>Description</label>
+                    <textarea id="materialDesc" required></textarea>
+
+                    <button>Add Material</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const validUsers = ["2400031544", "2400031358", "2400031360"];
+    const userPassword = "kLU@12345";
+
+    const adminUsername = "admin";
+    const adminPassword = "MANI@123";
+
+    let subjects = [
+        { id: 1, name: "AIML", description: "Introduction to AI & ML concepts.", materials: [] },
+        { id: 2, name: "DBMS", description: "Database concepts and SQL basics.", materials: [] },
+        { id: 3, name: "Maths", description: "Engineering maths topics.", materials: [] },
+        { id: 4, name: "Java", description: "OOP concepts and Java basics.", materials: [] },
+        { id: 5, name: "Frontend Development", description: "HTML, CSS and JS basics.", materials: [] }
+    ];
+
+    // Tabs
+    document.getElementById("userTab").onclick = () => {
+        document.getElementById("userTab").classList.add("active");
+        document.getElementById("adminTab").classList.remove("active");
+        document.getElementById("userLoginCard").classList.remove("hidden");
+        document.getElementById("adminLoginCard").classList.add("hidden");
+    };
+
+    document.getElementById("adminTab").onclick = () => {
+        document.getElementById("adminTab").classList.add("active");
+        document.getElementById("userTab").classList.remove("active");
+        document.getElementById("adminLoginCard").classList.remove("hidden");
+        document.getElementById("userLoginCard").classList.add("hidden");
+    };
+
+    // USER LOGIN
+    document.getElementById("userLoginForm").onsubmit = function (e) {
+        e.preventDefault();
+        const id = document.getElementById("userId").value;
+        const pass = document.getElementById("userPass").value;
+
+        if (validUsers.includes(id) && pass === userPassword) {
+            document.getElementById("loginSection").classList.add("hidden");
+            document.getElementById("userDashboard").classList.remove("hidden");
+            loadUserSubjects();
+        } else {
+            alert("Invalid user login.");
+        }
+    };
+
+    // ADMIN LOGIN
+    document.getElementById("adminLoginForm").onsubmit = function (e) {
+        e.preventDefault();
+        const id = document.getElementById("adminId").value;
+        const pass = document.getElementById("adminPass").value;
+
+        if (id === adminUsername && pass === adminPassword) {
+            document.getElementById("loginSection").classList.add("hidden");
+            document.getElementById("adminDashboard").classList.remove("hidden");
+            loadAdminSubjects();
+        } else {
+            alert("Invalid admin login.");
+        }
+    };
+
+    // LOGOUT
+    document.getElementById("logoutUserBtn").onclick = function () {
+        document.getElementById("userDashboard").classList.add("hidden");
+        document.getElementById("loginSection").classList.remove("hidden");
+    };
+
+    document.getElementById("logoutAdminBtn").onclick = function () {
+        document.getElementById("adminDashboard").classList.add("hidden");
+        document.getElementById("loginSection").classList.remove("hidden");
+    };
+
+    // LOAD SUBJECTS FOR USER
+    function loadUserSubjects() {
+        const container = document.getElementById("subjectList");
+        container.innerHTML = "";
+
+        subjects.forEach(sub => {
+            const div = document.createElement("div");
+            div.className = "subject-card";
+            div.innerHTML = `<h4>${sub.name}</h4><p>${sub.description}</p>`;
+            div.onclick = () => showSubject(sub);
+            container.appendChild(div);
+        });
+    }
+
+    function showSubject(sub) {
+        document.getElementById("subjectTitle").innerText = sub.name;
+        document.getElementById("subjectDesc").innerText = sub.description;
+
+        const list = document.getElementById("materialList");
+        list.innerHTML = "";
+
+        if (sub.materials.length === 0) {
+            list.innerHTML = "<li>No materials available</li>";
+        } else {
+            sub.materials.forEach(m => {
+                list.innerHTML += `<li><b>${m.title}</b> - ${m.description}</li>`;
+            });
+        }
+    }
+
+    // LOAD SUBJECTS FOR ADMIN
+    function loadAdminSubjects() {
+        const list = document.getElementById("adminSubjectList");
+        const select = document.getElementById("materialSubject");
+
+        list.innerHTML = "";
+        select.innerHTML = "";
+
+        subjects.forEach(sub => {
+            list.innerHTML += `<li>${sub.name} - ${sub.description}</li>`;
+            select.innerHTML += `<option value="${sub.id}">${sub.name}</option>`;
+        });
+    }
+
+    // ADD SUBJECT
+    document.getElementById("addSubjectForm").onsubmit = function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("newSubName").value;
+        const desc = document.getElementById("newSubDesc").value;
+
+        subjects.push({
+            id: subjects.length + 1,
+            name,
+            description: desc,
+            materials: []
+        });
+
+        alert("Subject added.");
+        this.reset();
+        loadAdminSubjects();
+    };
+
+    // ADD MATERIAL
+    document.getElementById("addMaterialForm").onsubmit = function (e) {
+        e.preventDefault();
+
+        const subId = parseInt(document.getElementById("materialSubject").value);
+        const title = document.getElementById("materialTitle").value;
+        const desc = document.getElementById("materialDesc").value;
+
+        const sub = subjects.find(s => s.id === subId);
+        sub.materials.push({ title, description: desc });
+
+        alert("Material added.");
+        this.reset();
+        loadAdminSubjects();
+    };
+</script>
+
+</body>
+</html>
